@@ -1,0 +1,5 @@
+{
+  "name": "E-Chem Lab: ORR Kinetics Simulator",
+  "description": "An interactive, publication-quality visualization of Oxygen Reduction Reaction (ORR) electrochemistry. Simulates 2-electron vs 4-electron pathways, Levich transport constraints, and pH-dependent kinetics.",
+  "requestFramePermissions": []
+}
