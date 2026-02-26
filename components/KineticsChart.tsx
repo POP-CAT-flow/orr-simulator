@@ -70,3 +70,4 @@ export const KineticsChart: React.FC<Props> = ({ data }) => {
     </div>
   );
 };
+export default KineticsChart;
