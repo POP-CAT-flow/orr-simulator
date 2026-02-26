@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import ControlPanel from './components/ControlPanel'; // 确保路径对应
-import PolarizationChart from './components/PolarizationChart';
+import ControlPanel from './components/ControlPanel';
+import PolarizationChart from './components/PolarizationChart'; // 现在这里不会报错了
 import AccessModal from './AccessModal';
 
 const App = () => {
@@ -14,15 +14,16 @@ const App = () => {
   }, []);
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
-      {/* 左侧控制面板：全景展示 */}
+    <div className="flex h-screen bg-slate-50 overflow-hidden">
+      {/* 左侧：全景面板，直接展示所有参数 */}
       <aside className="w-[420px] bg-white shadow-xl z-10 flex flex-col border-r border-slate-200">
         <div className="p-6 bg-slate-900 text-white">
           <h1 className="text-xl font-bold">ORR Simulator v2.0</h1>
-          <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-widest">Motif-to-Ensemble Framework</p>
+          <p className="text-[10px] text-slate-400 mt-1 uppercase">Motif-to-Ensemble Framework</p>
         </div>
 
         <div className="flex-1 overflow-y-auto">
+          {/* 将解锁状态和请求函数传给面板 */}
           <ControlPanel
             isUnlocked={isUnlocked}
             onRequestAccess={() => setShowModal(true)}
@@ -30,22 +31,22 @@ const App = () => {
         </div>
       </aside>
 
-      {/* 右侧图表区：全景展示，始终清晰 */}
+      {/* 右侧：图表全景，始终清晰可见 */}
       <main className="flex-1 p-8 bg-slate-50 overflow-y-auto">
-        <div className="max-w-5xl mx-auto space-y-6">
+        <div className="max-w-5xl mx-auto">
           <section className="bg-white p-8 rounded-3xl shadow-sm border border-slate-200">
             <h2 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
               <span className="w-2 h-6 bg-blue-600 rounded-full"></span>
-              RDE Polarization Curve / 极化曲线
+              Polarization Curve / 极化曲线
             </h2>
-            <div className="h-[500px] w-full">
+            <div className="h-[550px]">
               <PolarizationChart />
             </div>
           </section>
         </div>
       </main>
 
-      {/* 弹窗组件：可随时关闭 */}
+      {/* 弹窗组件：点击受限区域时弹出 */}
       {showModal && (
         <AccessModal
           onClose={() => setShowModal(false)}
