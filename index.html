@@ -1,14 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="zh-CN">
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>E-Chem Lab: ORR Simulator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body { font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+      #root { display: none; } /* 验证通过前隐藏核心内容 */
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <div id="gatekeeper" class="fixed inset-0 bg-slate-900/95 flex items-center justify-center z-[9999] p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-4xl w-full overflow-hidden flex flex-col md:flex-row min-h-[500px]">
+
+            <div class="p-10 flex-1 border-b md:border-b-0 md:border-r border-slate-100 flex flex-col justify-center">
+                <h2 class="text-2xl font-bold text-slate-800 mb-1">申请访问</h2>
+                <h3 class="text-lg font-medium text-slate-400 mb-4 italic">Request Access</h3>
+
+                <p class="text-sm text-slate-500 mb-6 leading-relaxed">
+                    由于包含未发表的科研数据，请填写信息申请。作者将通过邮件回复访问码。<br>
+                    <span class="italic text-slate-400">Due to unpublished research data, please apply for access. The author will reply with a code via email.</span>
+                </p>
+
+                <div class="space-y-4">
+                    <input type="text" id="req-name" placeholder="姓名 / Full Name" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    <input type="text" id="req-org" placeholder="单位 / Affiliation" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+                    <input type="email" id="req-email" placeholder="邮箱 / Email" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition">
+
+                    <button onclick="sendApplication()" class="w-full bg-slate-800 text-white py-3 rounded-xl font-semibold hover:bg-slate-700 transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg">
+                        生成申请邮件 <br> <span class="text-xs font-normal opacity-70 italic">Generate Application Email</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="p-10 flex-1 bg-slate-50 flex flex-col justify-center">
+                <h2 class="text-2xl font-bold text-slate-800 mb-1">已有访问码？</h2>
+                <h3 class="text-lg font-medium text-slate-400 mb-4 italic">Have an Access Code?</h3>
+
+                <p class="text-sm text-slate-500 mb-6 leading-relaxed">
+                    请输入作者回复给您的专属访问码。<br>
+                    <span class="italic text-slate-400">Please enter your personal access code provided by the author.</span>
+                </p>
+
+                <div class="space-y-4">
+                    <input type="password" id="pass-code" placeholder="输入访问码 / Access Code" class="w-full border border-slate-200 rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition text-center tracking-widest">
+                    <button onclick="verify()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all transform hover:scale-[1.02] active:scale-95 shadow-lg">
+                        进入系统 <br> <span class="text-xs font-normal opacity-70 italic">Enter Simulator</span>
+                    </button>
+                    <p id="err-msg" class="text-red-500 text-xs hidden text-center font-medium">访问码错误，请重新核对 <br> <span class="italic font-normal">Invalid code, please try again.</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="root"></div>
+
+    <script>
+      function sendApplication() {
+        const name = document.getElementById('req-name').value;
+        const org = document.getElementById('req-org').value;
+        const email = document.getElementById('req-email').value;
+        const myEmail = "your-email@example.com"; // 👈 请修改为你接收申请的真实邮箱
+
+        if(!name || !org || !email) {
+          alert("请完整填写申请信息 / Please complete all fields.");
+          return;
+        }
+
+        const subject = encodeURIComponent("ORR Simulator Access Request - " + name);
+        const body = encodeURIComponent(
+          `Hello, I would like to request access to the ORR Simulator.\n\n` +
+          `Name: ${name}\n` +
+          `Affiliation: ${org}\n` +
+          `Email: ${email}\n` +
+          `Purpose: Academic Research`
+        );
+
+        window.location.href = `mailto:${myEmail}?subject=${subject}&body=${body}`;
+      }
+
+      function verify() {
+        const input = document.getElementById('pass-code').value;
+        const MASTER_KEY = "YourCode2026"; // 👈 请修改为你审核后发给别人的访问码
+
+        if (input === MASTER_KEY) {
+          document.getElementById('gatekeeper').remove();
+          document.getElementById('root').style.display = 'block';
+          sessionStorage.setItem('lab_access', 'true');
+        } else {
+          document.getElementById('err-msg').classList.remove('hidden');
+        }
+      }
+
+      if (sessionStorage.getItem('lab_access') === 'true') {
+        document.getElementById('gatekeeper').remove();
+        document.getElementById('root').style.display = 'block';
+      }
+    </script>
+
     <script type="module" src="./index.tsx"></script>
-  </body>
+</body>
 </html>
