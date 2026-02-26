@@ -5,7 +5,7 @@ import path from 'path'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', '');
   return {
-    // 必须添加此行，确保资源从 /orr-simulator/ 加载
+    // 解决 404 报错的关键
     base: '/orr-simulator/',
 
     plugins: [react()],
@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        // 针对无 src 文件夹的结构，将 @ 指向根目录
+        // 因为没有 src 文件夹，这里指向当前目录
         '@': path.resolve(__dirname, '.'),
       }
     },
