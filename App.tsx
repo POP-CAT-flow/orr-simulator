@@ -3,7 +3,7 @@ import { runSimulation } from './services/electrochemistry';
 import { ControlPanel } from './components/ControlPanel';
 import { KineticsChart } from './components/KineticsChart';
 import { PolarizationChart } from './components/PolarizationChart';
-import { AccessModal } from './AccessModal'; // 新增组件
+import { AccessModal } from './AccessModal';
 import { SimulationParams } from './types';
 
 const App: React.FC = () => {
@@ -11,7 +11,6 @@ const App: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // 检查本会话是否已解锁
     if (sessionStorage.getItem('lab_unlocked') === 'true') {
       setIsUnlocked(true);
     }
@@ -34,21 +33,18 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
-      {/* 顶部标题栏 */}
       <header className="bg-white border-b border-slate-200 px-8 py-4 flex items-center justify-between sticky top-0 z-10 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-indigo-200 shadow-lg">e⁻</div>
+          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">e⁻</div>
           <div>
             <h1 className="text-xl font-bold tracking-tight">ORR Kinetics Simulator</h1>
-            <p className="text-xs text-slate-500 font-medium italic">Multiphysics Electrochemical Modeling</p>
+            <p className="text-xs text-slate-500 font-medium">Multiphysics Electrochemical Modeling</p>
           </div>
         </div>
       </header>
 
-      {/* 主界面：保持全景展示 */}
       <main className="flex-1 p-6 overflow-hidden">
         <div className="max-w-[1600px] mx-auto h-[calc(100vh-140px)] grid grid-cols-12 gap-6">
-
           <div className="col-span-12 lg:col-span-3 h-full overflow-hidden">
             <ControlPanel
               params={params}
@@ -58,7 +54,7 @@ const App: React.FC = () => {
             />
           </div>
 
-          <div className="col-span-12 lg:col-span-9 grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+          <div className="col-span-12 lg:col-span-9 grid grid-cols-1 lg:grid-cols-2 gap-6 h-full overflow-y-auto lg:overflow-hidden">
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-[500px] lg:h-full">
               <KineticsChart data={data} />
             </div>
@@ -69,7 +65,6 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      {/* 权限申请对话框 */}
       {showModal && (
         <AccessModal
           onClose={() => setShowModal(false)}
