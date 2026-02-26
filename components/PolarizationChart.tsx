@@ -69,3 +69,5 @@ export const PolarizationChart: React.FC<Props> = ({ data }) => {
     </div>
   );
 };
+
+export default PolarizationChart;
