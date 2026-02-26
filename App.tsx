@@ -10,8 +10,9 @@ const App: React.FC = () => {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  // 初始化检查持久化权限
   useEffect(() => {
-    if (sessionStorage.getItem('lab_unlocked') === 'true') {
+    if (localStorage.getItem('lab_access_granted') === 'true') {
       setIsUnlocked(true);
     }
   }, []);
@@ -38,7 +39,7 @@ const App: React.FC = () => {
           <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-lg">e⁻</div>
           <div>
             <h1 className="text-xl font-bold tracking-tight">ORR Kinetics Simulator</h1>
-            <p className="text-xs text-slate-500 font-medium">Multiphysics Electrochemical Modeling</p>
+            <p className="text-xs text-slate-500 font-medium italic">Multiphysics Electrochemical Modeling</p>
           </div>
         </div>
       </header>
@@ -47,20 +48,14 @@ const App: React.FC = () => {
         <div className="max-w-[1600px] mx-auto h-[calc(100vh-140px)] grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-3 h-full overflow-hidden">
             <ControlPanel
-              params={params}
-              setParams={setParams}
+              params={params} setParams={setParams}
               isUnlocked={isUnlocked}
               onRequestAccess={() => setShowModal(true)}
             />
           </div>
-
-          <div className="col-span-12 lg:col-span-9 grid grid-cols-1 lg:grid-cols-2 gap-6 h-full overflow-y-auto lg:overflow-hidden">
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-[500px] lg:h-full">
-              <KineticsChart data={data} />
-            </div>
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-[500px] lg:h-full">
-              <PolarizationChart data={data} />
-            </div>
+          <div className="col-span-12 lg:col-span-9 grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-full"><KineticsChart data={data} /></div>
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col h-full"><PolarizationChart data={data} /></div>
           </div>
         </div>
       </main>
@@ -68,9 +63,9 @@ const App: React.FC = () => {
       {showModal && (
         <AccessModal
           onClose={() => setShowModal(false)}
-          onSuccess={() => {
+          onSuccess={(remember: boolean) => {
             setIsUnlocked(true);
-            sessionStorage.setItem('lab_unlocked', 'true');
+            if (remember) localStorage.setItem('lab_access_granted', 'true');
             setShowModal(false);
           }}
         />
