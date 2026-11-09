@@ -51,7 +51,7 @@ The interface allows users to change:
 - Double-layer-capacitance scaling
 - The weights assigned to the five predefined coordination motifs
 
-The initial motif weights are `O4 = 0.03`, `S1O3 = 0.21`, `S2O2 = 0.44`, `S3O1 = 0.27` and `S4 = 0.05`.
+The initial motif weights are included.
 
 **Important:** motif weights are applied as entered and are not automatically normalized. If they are intended to represent relative populations, users should ensure that the values sum to one.
 
